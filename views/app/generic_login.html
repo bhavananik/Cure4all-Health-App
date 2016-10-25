@@ -14,9 +14,9 @@
                     <form name="login_form" class="" novalidate ng-cloak id="loginuser" ng-submit="doLogIn()">
                         <input type="hidden" value="{{interface}}" ng-model="interface" name="interface">
 
-                        <div class="item item-divider">Smartcard Id</div>
+                        <div class="item item-divider">Email / Phone</div>
                         <label class="item item-input">
-                            <input type="email" placeholder="Smartcard Id" id="useremail" name="user" ng-model="user.email" required>
+                            <input type="email" placeholder="Email / Phone" id="useremail" name="user" ng-model="user.email" required>
 
                         </label>
                         <div class="item item-divider">Password</div>
@@ -39,7 +39,7 @@
                     <div class="btnforgot" ng-click="forgotpassword()">Forgot Password</div>
                 </my-tab>
 
-                <!--<my-tab  title="Register"> 
+                <my-tab  title="Register"> 
                     <form name="signupForm" class="" novalidate id="signup">
 
                         <input type="hidden" value="{{interface}}" ng-model="interface" name="interface">
@@ -115,7 +115,7 @@
                         </form>
                         <br/>
                     </div>
-                </my-tab>-->
+                </my-tab>
 
             </my-tabs>
         
