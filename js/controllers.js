@@ -3,7 +3,7 @@ var session;
 var subscriber;
 angular.module('your_app_name.controllers', ['ionic', 'ngCordova'])
         .controller('AuthCtrl', function ($scope, $state, $ionicConfig, $rootScope) {
-            $scope.interface = window.localStorage.setItem('interface_id', '21');
+            $scope.interface = window.localStorage.setItem('interface_id', apkInterfaceId);
             if (window.localStorage.getItem('id') != null) {
                 $rootScope.userLogged = 1;
                 $rootScope.username = window.localStorage.getItem('fname');
@@ -44,7 +44,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
             console.log('sdad---' + $rootScope.userLogged + " == " + window.localStorage.getItem('id'));
             // added generic code ---
 
-            window.localStorage.setItem('interface_id', '21');
+            window.localStorage.setItem('interface_id', apkInterfaceId);
             $scope.interface = window.localStorage.getItem('interface_id');
             $scope.userType = 'patient';
             $scope.action = 'login';
@@ -52,6 +52,8 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
 
             $rootScope.$on('showLoginModal', function ($event, scope, cancelCallback, callback) {
                 //bhavana----------
+
+
                 $scope.user = {};
                 $scope.user.name = '';
                 $scope.user.email = '';
@@ -112,7 +114,6 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                         url: domain + 'get-login-logout-log',
                                         params: {userId: window.localStorage.getItem('id'), interface: $scope.interface, type: $scope.userType, action: $scope.action}
                                     }).then(function successCallback(response) {
-
                                         $http({
                                             method: 'GET',
                                             url: domain + 'get-login',
@@ -134,6 +135,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                             console.log(response);
                                         });
                                     }, function errorCallback(e) {
+
                                         console.log(e);
                                     });
 
@@ -145,6 +147,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                             } else {
                                                 $scope.userId = '';
                                             }
+
                                             $http({
                                                 method: 'GET',
                                                 url: domain + 'notification/insertPlayerId',
@@ -162,6 +165,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                     } catch (err) {
                                         // $state.go('app.category-list');
                                     }
+
                                     //   $rootScope.url = document.referrer;
                                     if (typeof callback === 'function') {
                                         callback();
@@ -212,10 +216,10 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                         })
                     }
                     $scope.doSignUp = function () {
-                        $('#checkotp').removeClass('hide');
-                        $('#signup').addClass('hide');
                         var data = "name=" + $scope.user.name + "&email=" + $scope.user.email + "&phone=" + $scope.user.phone + "&password=" + $scope.user.password + "&interface=" + $scope.interface + "&registervia=" + $scope.registervia;
                         //var data = new FormData(jQuery("#signup")[0]);
+                        $('#checkotp').removeClass('hide');
+                        $('#signup').addClass('hide');
                         $.ajax({
                             type: 'GET',
                             url: domain + "check-otp",
@@ -228,8 +232,8 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                 $ionicScrollDelegate.scrollTop([true]);
                                 store($scope.user);
                                 alert('Kindly check your mobile for OTP')
-//                                $('#checkotp').removeClass('hide');
-//                                $('#signup').addClass('hide');
+                                $ionicScrollDelegate.scrollTop();
+
                             }
                         });
                     };
@@ -246,8 +250,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                         console.log("data " + data);
                         var code = window.localStorage.getItem('code');
                         if (parseInt(code) === parseInt(otp)) {
-                            console.log('code' + code + '--otp--' + otp);
-                            $ionicLoading.show({template: 'Loading..'});
+                            console.log('code' + code + '--otp--' + otp)
                             $.ajax({
                                 type: 'GET',
                                 url: domain + "register",
@@ -256,7 +259,6 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                 contentType: false,
                                 processData: false,
                                 success: function (response) {
-                                    $ionicLoading.hide();
                                     if (angular.isObject(response)) {
                                         store(response);
                                         $rootScope.userLogged = 1;
@@ -276,7 +278,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                                     params: {userId: $scope.userId, playerId: ids.userId, pushToken: ids.pushToken}
                                                 }).then(function successCallback(response) {
                                                     if (response.data == 1) {
-                                                        // alert('Your sucessfully registered');
+                                                        // alert('You are sucessfully registered');
                                                         // $state.go('app.category-list', {}, {reload: true});
                                                     }
                                                 }, function errorCallback(e) {
@@ -286,7 +288,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                         } catch (err) {
 
                                         }
-                                        alert('Your sucessfully registered');
+                                        alert('You are sucessfully registered');
                                         if (typeof callback === 'function') {
                                             callback();
                                         }
@@ -296,9 +298,9 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                                         alert('Please fill all the details for signup');
                                     }
                                     $rootScope.$digest;
+
                                 },
                                 error: function (e) {
-                                    $ionicLoading.hide();
                                     console.log(e.responseText);
                                 }
                             });
@@ -428,7 +430,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
                         $ionicHistory.nextViewOptions({disableBack: true, historyRoot: true});
                         //$state.go('auth.walkthrough', {}, {reload: true});
                         window.localStorage.setItem('apkLanguage', 'english');
-                        window.localStorage.setItem('interface_id', '21');
+                        window.localStorage.setItem('interface_id', apkInterfaceId);
                         $scope.sideMenu();
                         $state.go('app.category-list');
                     }, 30);
@@ -481,7 +483,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
         })
 //LOGIN
         .controller('LoginCtrl', function ($scope, $state, $http, $ionicHistory, $templateCache, $q, $rootScope, $ionicLoading, $timeout) {
-            window.localStorage.setItem('interface_id', '21');
+            window.localStorage.setItem('interface_id', apkInterfaceId);
             $scope.interface = window.localStorage.getItem('interface_id');
             $scope.userType = 'patient';
             $scope.action = 'login';
@@ -616,7 +618,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
         })
 
         .controller('SignupCtrl', function ($scope, $state, $http, $rootScope, $ionicScrollDelegate) {
-            $scope.interface = window.localStorage.setItem('interface_id', '21');
+            $scope.interface = window.localStorage.setItem('interface_id', apkInterfaceId);
             $scope.registervia = window.localStorage.setItem('registervia', 'apk');
             $scope.user = {};
             $scope.user.name = '';
@@ -901,7 +903,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
             } else {
                 $rootScope.userLogged = 0;
             }
-            window.localStorage.setItem('interface_id', '21');
+            window.localStorage.setItem('interface_id', apkInterfaceId);
             $scope.interface = window.localStorage.getItem('interface_id');
             $scope.userId = window.localStorage.getItem('id');
             $http({
@@ -7740,7 +7742,7 @@ angular.module('PasswordConfirm', []).directive('changePasswordC', function () {
         })
 
         .controller('GenericLoginCtrl', function ($scope, $state, $sce, $rootScope, $ionicLoading, $http, $stateParams, $timeout, $filter) {
-            window.localStorage.setItem('interface_id', '21');
+            window.localStorage.setItem('interface_id', apkInterfaceId);
             $scope.interface = window.localStorage.getItem('interface_id');
             $scope.userType = 'patient';
             $scope.action = 'login';
